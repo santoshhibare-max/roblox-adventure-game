@@ -1,6 +1,6 @@
 -- Gun Shop System
 -- Manage gun purchases and sales
--- Place server script in a part representing the gun shop
+-- Place server script in ServerScriptService (not in the part)
 
 local Players = game:GetService("Players")
 
@@ -21,7 +21,7 @@ local function purchaseGun(player)
         return {success = false, message = "Inventory system not found"}
     end
     
-    local inventory = inventorySystem:InvokeClient(player, "GetInventory")
+    local inventory = inventorySystem:InvokeServer("GetInventory")
     if not inventory then
         return {success = false, message = "Could not get inventory"}
     end
@@ -37,8 +37,8 @@ local function purchaseGun(player)
     end
     
     -- Spend gold and give gun
-    inventorySystem:InvokeClient(player, "SpendGold", gunConfig.price)
-    inventorySystem:InvokeClient(player, "GiveGun")
+    inventorySystem:InvokeServer("SpendGold", gunConfig.price)
+    inventorySystem:InvokeServer("GiveGun")
     
     print(player.Name .. " purchased a gun for " .. gunConfig.price .. " gold")
     return {success = true, message = "Gun purchased! You now have " .. gunConfig.name}
